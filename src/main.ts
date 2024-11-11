@@ -1,6 +1,22 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import { createPinia } from "pinia";
+import "@/assets/scss/app.scss";
+import "vfonts/FiraCode.css";
 
-createApp(App).use(store).use(router).mount("#app");
+import naive from "naive-ui";
+import { useAuthStore } from "@/stores/auth";
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(router);
+app.use(naive);
+
+app.use(pinia);
+
+app.mount("#app");
+
+const authStore = useAuthStore();
+authStore.refresh();
+setInterval(() => authStore.refresh(), 30 * 1000);
