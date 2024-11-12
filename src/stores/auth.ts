@@ -23,7 +23,7 @@ interface UserType {
   image: string;
 }
 
-let refreshTimer: number | null = null;
+const refreshTimer: number | null = null;
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -43,16 +43,10 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       this.user = null;
       this.token.remove();
-      if (refreshTimer) clearTimeout(refreshTimer);
-    },
-
-    setUser(user: UserType) {
-      this.user = user;
     },
 
     setToken(accessToken: string, refreshToken: string, expires: Date) {
       this.token = new Token(accessToken, refreshToken, expires);
-      // this.startRefreshTimer();
     },
 
     async login(payload: LoginPayload) {
@@ -84,7 +78,7 @@ export const useAuthStore = defineStore("auth", {
             gender: response.data.gender,
             image: response.data.image,
           };
-          window.$message.success("Добро пожаловать ёпты");
+          window.$message.success("Добро пожаловать");
           router.push({ name: "index" });
         })
         // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -128,16 +122,6 @@ export const useAuthStore = defineStore("auth", {
           console.error("Ошибка обновления токена:", error);
         }
       }
-    },
-
-    startRefreshTimer() {
-      if (refreshTimer) clearTimeout(refreshTimer);
-      const expiresInMs =
-        this.token.getExpireTime().getTime() - Date.now() - 30 * 1000;
-      console.log("запустили таймер обновления на " + expiresInMs + " мс");
-      refreshTimer = setTimeout(async () => {
-        await this.refresh();
-      }, expiresInMs);
     },
   },
 });
