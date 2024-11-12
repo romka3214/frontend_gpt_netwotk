@@ -37,8 +37,8 @@ instance.interceptors.response.use(
     if (status === 401) {
       errorNotify(error.response.data.message || "auth_error");
       new Token().remove();
-      if (window.location.pathname !== "/login")
-        window.location.replace("/login");
+      if (window.location.pathname !== "/auth")
+        window.location.replace("/auth");
     }
 
     if (status === 403) {
