@@ -8,6 +8,11 @@ interface LoginPayload {
   password: string;
 }
 
+interface RegistrationPayload {
+  login: string;
+  password: string;
+}
+
 interface UserType {
   id: number;
   username: string;
@@ -81,6 +86,24 @@ export const useAuthStore = defineStore("auth", {
           };
           window.$message.success("Добро пожаловать ёпты");
           router.push({ name: "index" });
+        })
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        .catch(() => {});
+    },
+
+    async registration(payload: RegistrationPayload) {
+      const request = {
+        username: payload.login,
+        password: payload.password,
+      };
+      await axios
+        .request({
+          url: "/register",
+          method: "POST",
+          data: request,
+        })
+        .then(() => {
+          window.$message.success("Успешная регистрация, авторизируйтесь");
         })
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         .catch(() => {});

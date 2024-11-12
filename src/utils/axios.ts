@@ -47,7 +47,6 @@ instance.interceptors.response.use(
 
     if (status === 404) {
       errorNotify("not_found");
-      window.history.back();
     }
 
     if (status === 419) {
