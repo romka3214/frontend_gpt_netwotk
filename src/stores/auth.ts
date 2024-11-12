@@ -23,8 +23,6 @@ interface UserType {
   image: string;
 }
 
-const refreshTimer: number | null = null;
-
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: {} as UserType | null,
@@ -53,11 +51,10 @@ export const useAuthStore = defineStore("auth", {
       const request = {
         username: payload.login,
         password: payload.password,
-        expiresInMins: 1,
       };
       await axios
         .request({
-          url: "/auth/login",
+          url: "/auth/login/",
           method: "POST",
           data: request,
         })
@@ -69,15 +66,6 @@ export const useAuthStore = defineStore("auth", {
             response.data.refreshToken,
             date
           );
-          this.user = {
-            id: response.data.id,
-            username: response.data.username,
-            email: response.data.email,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            gender: response.data.gender,
-            image: response.data.image,
-          };
           window.$message.success("Добро пожаловать");
           router.push({ name: "index" });
         })
@@ -92,7 +80,7 @@ export const useAuthStore = defineStore("auth", {
       };
       await axios
         .request({
-          url: "/register",
+          url: "/auth/registration/",
           method: "POST",
           data: request,
         })

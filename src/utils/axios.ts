@@ -12,12 +12,12 @@ function errorNotify(message: string): void {
 }
 
 const instance: AxiosInstance = axios.create();
-const domain = "https://dummyjson.com";
+const domain = "http://localhost:8079";
 instance.defaults.baseURL = domain;
 instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = new Token().getToken();
   config.headers.Authorization = token ? `Bearer ${token}` : "";
-  // config.headers["Access-Control-Expose-Headers"] = "error";
+  config.headers["Access-Control-Expose-Headers"] = "error";
   return config;
 });
 instance.interceptors.response.use(
