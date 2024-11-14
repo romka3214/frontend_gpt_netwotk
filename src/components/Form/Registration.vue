@@ -39,14 +39,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type {
-  FormInst,
-  FormItemInst,
-  FormItemRule,
-  FormRules,
-  FormValidationError,
-} from "naive-ui";
-import { useMessage } from "naive-ui";
+import type { FormInst, FormItemInst, FormItemRule, FormRules } from "naive-ui";
+
 import { useAuthStore } from "@/stores/auth";
 
 interface ModelType {
@@ -59,7 +53,6 @@ const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 const rPasswordFormItemRef = ref<FormItemInst | null>(null);
-const message = useMessage();
 const model = ref<ModelType>({
   login: null,
   password: null,
@@ -116,7 +109,6 @@ function handlePasswordInput() {
   if (model.value.reenteredPassword) {
     rPasswordFormItemRef.value
       ?.validate({ trigger: "password-input" })
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
   }
 }
@@ -130,18 +122,12 @@ function submit(e: MouseEvent) {
     .then(async () => {
       if (model.value.login && model.value.password) {
         await authStore.registration({
-          login: model.value.login,
+          username: model.value.login,
           password: model.value?.password,
         });
       }
     })
-    .catch((errors: Array<FormValidationError> | undefined) => {
-      if (!errors) {
-        message.success("Valid");
-      } else {
-        message.error("Invalid");
-      }
-    })
+    .catch(() => {})
     .finally(() => {
       model.value.loading = false;
     });

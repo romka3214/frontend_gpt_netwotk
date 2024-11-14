@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
-import Token from "@/utils/auth/Token";
+import Token from "@/api/Token";
 
 function successNotify(message: string): void {
   console.log("Успешный ответ от сервера - " + message);

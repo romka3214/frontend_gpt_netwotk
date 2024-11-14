@@ -28,7 +28,7 @@ import Registration from "@/components/Form/Registration.vue";
 
 .n-card {
   width: 100%;
-  max-width: 400px; /* Максимальная ширина формы */
+  max-width: 400px;
   padding: 20px;
 }
 </style>

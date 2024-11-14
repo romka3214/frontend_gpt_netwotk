@@ -60,7 +60,7 @@ const submitLoginForm = () => {
     ?.validate()
     .then(async () => {
       await authStore.login({
-        login: authFormValue.value.login,
+        username: authFormValue.value.login,
         password: authFormValue.value.password,
       });
     })

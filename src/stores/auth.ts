@@ -1,17 +1,10 @@
 import { defineStore } from "pinia";
-import Token from "@/utils/auth/Token";
-import axios from "@/utils/axios";
+import Token from "@/api/Token";
+import axios from "@/api/axios";
 import router from "@/router";
-
-interface LoginPayload {
-  login: string;
-  password: string;
-}
-
-interface RegistrationPayload {
-  login: string;
-  password: string;
-}
+import { LoginRequest } from "@/api/requests/login";
+import { RegistrationRequest } from "@/api/requests/registration";
+import { UserResource } from "@/api/resources/user";
 
 interface UserType {
   id: number;
@@ -47,47 +40,29 @@ export const useAuthStore = defineStore("auth", {
       this.token = new Token(accessToken, refreshToken, expires);
     },
 
-    async login(payload: LoginPayload) {
-      const request = {
-        username: payload.login,
+    async login(payload: LoginRequest) {
+      await UserResource.login({
+        username: payload.username,
         password: payload.password,
-      };
-      await axios
-        .request({
-          url: "/auth/login/",
-          method: "POST",
-          data: request,
-        })
+      } as LoginRequest)
         .then((response) => {
           const date = new Date();
           date.setMinutes(date.getMinutes() + 1);
-          this.setToken(
-            response.data.accessToken,
-            response.data.refreshToken,
-            date
-          );
+          this.setToken(response.accessToken, response.refreshToken, date);
           window.$message.success("Добро пожаловать");
           router.push({ name: "index" });
         })
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         .catch(() => {});
     },
 
-    async registration(payload: RegistrationPayload) {
-      const request = {
-        username: payload.login,
+    async registration(payload: RegistrationRequest) {
+      await UserResource.registration({
+        username: payload.username,
         password: payload.password,
-      };
-      await axios
-        .request({
-          url: "/auth/registration/",
-          method: "POST",
-          data: request,
-        })
+      } as RegistrationRequest)
         .then(() => {
           window.$message.success("Успешная регистрация, авторизируйтесь");
         })
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         .catch(() => {});
     },
 
