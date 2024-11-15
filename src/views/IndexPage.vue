@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
+import PostList from "@/components/PostList.vue";
 const authStore = useAuthStore();
 
 const logout = () => {
@@ -9,7 +10,8 @@ const logout = () => {
 </script>
 
 <template>
-  <n-h1>Прив чо дел, пока что тут ничего нет</n-h1>
-  <n-button @click="logout"> Выйти </n-button>
+  <n-h1>Посты гениев</n-h1>
+  <!--  <n-button @click="logout"> Выйти </n-button>-->
+  <PostList />
 </template>
 <style scoped></style>

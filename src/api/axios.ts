@@ -12,7 +12,7 @@ function errorNotify(message: string): void {
 }
 
 const instance: AxiosInstance = axios.create();
-const domain = "http://localhost:8079";
+const domain = "http://localhost:85";
 instance.defaults.baseURL = domain;
 instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = new Token().getToken();
