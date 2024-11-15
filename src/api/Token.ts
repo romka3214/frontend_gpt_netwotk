@@ -34,7 +34,7 @@ class Token {
     localStorage.setItem(tokenStorageIndex, this.token);
 
     this.refreshToken = refreshToken;
-    localStorage.setItem(refreshTokenStorageIndex, this.token);
+    localStorage.setItem(refreshTokenStorageIndex, this.refreshToken);
 
     this.expires = expires;
     localStorage.setItem(

@@ -34,6 +34,7 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       this.user = null;
       this.token.remove();
+      window.location.replace("/auth");
     },
 
     setToken(accessToken: string, refreshToken: string, expires: Date) {
@@ -68,22 +69,24 @@ export const useAuthStore = defineStore("auth", {
 
     async refresh() {
       if (this.token.getToken() !== null) {
-        try {
-          console.log("обновляем токен");
-          const response = await axios.post("/auth/refresh", {
+        console.log("обновляем токен");
+        await axios
+          .post("/auth/refresh/", {
             refreshToken: this.token.getRefreshToken(),
+          })
+          .then((response) => {
+            console.log(response.data);
+            const date = new Date();
+            date.setMinutes(date.getMinutes() + 1);
+            this.setToken(
+              response.data.accessToken,
+              response.data.refreshToken,
+              date
+            );
+          })
+          .catch((error) => {
+            console.error("Ошибка обновления токена:", error);
           });
-
-          const date = new Date();
-          date.setMinutes(date.getMinutes() + 1);
-          this.setToken(
-            response.data.accessToken,
-            response.data.refreshToken,
-            date
-          );
-        } catch (error) {
-          console.error("Ошибка обновления токена:", error);
-        }
       }
     },
   },

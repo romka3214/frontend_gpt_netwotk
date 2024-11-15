@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useMessage } from "naive-ui";
+import { useAuthStore } from "@/stores/auth";
 window.$message = useMessage();
+const authStore = useAuthStore();
 </script>
 <template>
   <div class="container mx-auto grid grid-cols-12 gap-4 h-screen">
@@ -14,6 +16,7 @@ window.$message = useMessage();
         >
       </nav>
       <button
+        @click="authStore.logout"
         class="bg-neutral-700 text-white font-bold py-2 px-4 rounded w-full"
       >
         Выйти
