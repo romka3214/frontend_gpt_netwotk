@@ -24,7 +24,10 @@ const authStore = useAuthStore();
     </aside>
 
     <!-- Центральная колонка (Контент) -->
-    <main class="col-span-7 h-full overflow-y-scroll p-4">
+    <main
+      id="mainScrollContainer"
+      class="col-span-7 h-full overflow-y-scroll p-4"
+    >
       <router-view v-slot="{ Component }">
         <component :is="Component" />
       </router-view>

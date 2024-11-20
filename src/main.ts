@@ -19,4 +19,4 @@ app.mount("#app");
 
 const authStore = useAuthStore();
 authStore.refresh();
-setInterval(() => authStore.refresh(), 30 * 1000);
+setInterval(() => authStore.refresh(), 29 * 1000);

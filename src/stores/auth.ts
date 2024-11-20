@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 import Token from "@/api/Token";
 import axios from "@/api/axios";
 import router from "@/router";
-import { LoginRequest } from "@/api/requests/login";
-import { RegistrationRequest } from "@/api/requests/registration";
+import { LoginRequest } from "@/api/requests/user/login";
+import { RegistrationRequest } from "@/api/requests/user/registration";
 import { UserResource } from "@/api/resources/user";
 
 interface UserType {
@@ -16,6 +16,8 @@ interface UserType {
   image: string;
 }
 
+const tokenLifeTime = 30;
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: {} as UserType | null,
@@ -24,8 +26,6 @@ export const useAuthStore = defineStore("auth", {
 
   getters: {
     isAuth: (state) => {
-      console.log(state.token);
-      console.log(state.token.isTokenFresh());
       return state.token.isTokenFresh();
     },
   },
@@ -42,13 +42,10 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async login(payload: LoginRequest) {
-      await UserResource.login({
-        username: payload.username,
-        password: payload.password,
-      } as LoginRequest)
+      await UserResource.login(payload)
         .then((response) => {
           const date = new Date();
-          date.setMinutes(date.getMinutes() + 1);
+          date.setMinutes(date.getMinutes() + tokenLifeTime);
           this.setToken(response.accessToken, response.refreshToken, date);
           window.$message.success("Добро пожаловать");
           router.push({ name: "index" });
@@ -57,10 +54,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async registration(payload: RegistrationRequest) {
-      await UserResource.registration({
-        username: payload.username,
-        password: payload.password,
-      } as RegistrationRequest)
+      await UserResource.registration(payload)
         .then(() => {
           window.$message.success("Успешная регистрация, авторизируйтесь");
         })
@@ -68,26 +62,23 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async refresh() {
-      if (this.token.getToken() !== null) {
-        console.log("обновляем токен");
-        await axios
-          .post("/auth/refresh/", {
-            refreshToken: this.token.getRefreshToken(),
-          })
-          .then((response) => {
-            console.log(response.data);
-            const date = new Date();
-            date.setMinutes(date.getMinutes() + 1);
-            this.setToken(
-              response.data.accessToken,
-              response.data.refreshToken,
-              date
-            );
-          })
-          .catch((error) => {
-            console.error("Ошибка обновления токена:", error);
-          });
+      if (
+        this.token.getToken() == null ||
+        this.token.getRefreshToken() == null
+      ) {
+        return;
       }
+      await UserResource.refresh({
+        refreshToken: this.token.getRefreshToken() ?? "",
+      })
+        .then((response) => {
+          const date = new Date();
+          date.setMinutes(date.getMinutes() + tokenLifeTime);
+          this.setToken(response.accessToken, response.refreshToken, date);
+        })
+        .catch((error) => {
+          console.error("Ошибка обновления токена:", error);
+        });
     },
   },
 });
