@@ -91,7 +91,7 @@ export abstract class PostResource {
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve(mockResponse);
-      }, 1000)
+      }, 1500)
     );
   }
 }
