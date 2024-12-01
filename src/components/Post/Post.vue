@@ -45,7 +45,7 @@ const toggleComments = () => {
           <span v-if="post.commentsCount">{{ post.commentsCount }}</span>
         </button>
       </div>
-      <div class="text-gray-400">
+      <div>
         <CommentList v-if="commentsShowed" :post-id="post.id" />
       </div>
     </template>

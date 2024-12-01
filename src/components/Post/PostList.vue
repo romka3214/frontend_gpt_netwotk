@@ -21,10 +21,8 @@ const loadPosts = async () => {
   isLoading.value = true;
 
   await PostResource.get({
-    pagination: {
-      pageIndex: pageIndex.value,
-      recordsPerPage,
-    },
+    pageIndex: pageIndex.value,
+    recordsPerPage,
   })
     .then((response) => {
       postList.value = [...postList.value, ...response.posts];

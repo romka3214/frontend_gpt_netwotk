@@ -18,7 +18,6 @@ const totalRecords = ref(0);
 const isLoading = ref(false);
 
 const loadMore = async () => {
-  if (isLoading.value) return;
   isLoading.value = true;
 
   await CommentResource.get({
@@ -47,13 +46,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-for="comment in commentList" :key="comment.id">
-    <Comment :depth="1" :comment="comment" />
+  <div v-if="!isLoading">
+    <div v-for="comment in commentList" :key="comment.id">
+      <Comment :depth="1" :comment="comment" />
+    </div>
   </div>
+
   <div v-if="isLoading">
-    <CommentSkeleton />
-    <CommentSkeleton />
-    <CommentSkeleton />
+    <CommentSkeleton :depth="1" />
+    <CommentSkeleton :depth="1" />
+    <CommentSkeleton :depth="1" />
   </div>
   <button class="mt-4" @click="loadMore">Показать ещё</button>
 </template>
