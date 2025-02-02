@@ -1,7 +1,7 @@
 export interface PostResponse {
   authorID: number;
   authorName: string;
-  date: Date;
+  createdAt: Date;
   id: number;
   text: string;
   commentsCount: number;

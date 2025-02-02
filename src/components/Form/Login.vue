@@ -5,10 +5,10 @@
     :model="authFormValue"
     :rules="authRules"
   >
-    <n-form-item-row label="Логин" path="login">
+    <n-form-item-row label="Login" path="login">
       <n-input v-model:value="authFormValue.login" type="text" placeholder="" />
     </n-form-item-row>
-    <n-form-item-row label="Пароль" path="password">
+    <n-form-item-row label="Password" path="password">
       <n-input
         v-model:value="authFormValue.password"
         type="password"
@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import type { FormInst, FormValidationError } from "naive-ui";
+import type { FormInst } from "naive-ui";
 const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
@@ -64,11 +64,7 @@ const submitLoginForm = () => {
         password: authFormValue.value.password,
       });
     })
-    .catch((errors: Array<FormValidationError> | undefined) => {
-      if (errors) {
-        window.$message.error("куда ты тыкаешь");
-      }
-    })
+    .catch(() => {})
     .finally(() => {
       authFormValue.value.loading = false;
     });

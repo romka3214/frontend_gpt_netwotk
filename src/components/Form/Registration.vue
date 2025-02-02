@@ -1,9 +1,9 @@
 <template>
   <n-form :disabled="model.loading" ref="formRef" :model="model" :rules="rules">
-    <n-form-item-row path="login" label="Логин">
+    <n-form-item-row path="login" label="Login">
       <n-input placeholder="" v-model:value="model.login" type="text" />
     </n-form-item-row>
-    <n-form-item-row path="password" label="Пароль">
+    <n-form-item-row path="password" label="Password">
       <n-input
         @input="handlePasswordInput"
         placeholder=""
@@ -15,7 +15,7 @@
       ref="rPasswordFormItemRef"
       first
       path="reenteredPassword"
-      label="Подтверждение пароля"
+      label="Password confirmation"
     >
       <n-input
         placeholder=""
@@ -33,7 +33,7 @@
     secondary
     strong
   >
-    Зарегистрироваться
+    Sign Up
   </n-button>
 </template>
 
@@ -76,30 +76,30 @@ const rules: FormRules = {
   login: [
     {
       required: true,
-      message: "Логин обязателен",
+      message: "A login is required",
       trigger: "blur",
     },
   ],
   password: [
     {
       required: true,
-      message: "Пароль обязателен",
+      message: "A password is required",
     },
   ],
   reenteredPassword: [
     {
       required: true,
-      message: "Подтверждение пароля обязательно",
+      message: "Password confirmation is required",
       trigger: ["input", "blur"],
     },
     {
       validator: validatePasswordStartWith,
-      message: "Подтверждение пароля не совпадает с паролем",
+      message: "Password confirmation does not match the password",
       trigger: "input",
     },
     {
       validator: validatePasswordSame,
-      message: "Подтверждение пароля не совпадает с паролем",
+      message: "Password confirmation does not match the password",
       trigger: ["blur", "password-input"],
     },
   ],

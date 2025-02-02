@@ -27,14 +27,14 @@ const loadMore = async () => {
     postID: props.postId,
   })
     .then((response) => {
-      commentList.value = [...commentList.value, ...response.comments];
-      totalRecords.value = response.pagination.totalRecords;
-      pageIndex.value++;
-
-      console.log(commentList.value);
+      if (response.comments !== null) {
+        commentList.value = [...commentList.value, ...response.comments];
+        totalRecords.value = response.pagination.totalRecords;
+        pageIndex.value++;
+      }
     })
     .catch((error) => {
-      console.error("Failed to load comments:", error);
+      console.log("Failed to load comments:", error);
     })
     .finally(() => {
       isLoading.value = false;
@@ -47,15 +47,22 @@ onMounted(() => {
 
 <template>
   <div v-if="!isLoading">
-    <div v-for="comment in commentList" :key="comment.id">
-      <Comment :depth="1" :comment="comment" />
-    </div>
+    <template v-if="commentList.length !== 0">
+      <div v-for="comment in commentList" :key="comment.id">
+        <Comment :depth="1" :comment="comment" />
+      </div>
+    </template>
+    <template v-else> Nothing here... </template>
   </div>
 
   <div v-if="isLoading">
     <CommentSkeleton :depth="1" />
-    <CommentSkeleton :depth="1" />
-    <CommentSkeleton :depth="1" />
   </div>
-  <button class="mt-4" @click="loadMore">Показать ещё</button>
+  <button
+    v-if="commentList.length < totalRecords"
+    class="mt-4"
+    @click="loadMore"
+  >
+    Show more
+  </button>
 </template>

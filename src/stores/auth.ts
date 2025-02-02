@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import Token from "@/api/Token";
-import axios from "@/api/axios";
 import router from "@/router";
 import { LoginRequest } from "@/api/requests/user/login";
 import { RegistrationRequest } from "@/api/requests/user/registration";
@@ -47,7 +46,7 @@ export const useAuthStore = defineStore("auth", {
           const date = new Date();
           date.setMinutes(date.getMinutes() + tokenLifeTime);
           this.setToken(response.accessToken, response.refreshToken, date);
-          window.$message.success("Добро пожаловать");
+          window.$message.success("Welcome");
           router.push({ name: "index" });
         })
         .catch(() => {});
@@ -55,9 +54,7 @@ export const useAuthStore = defineStore("auth", {
 
     async registration(payload: RegistrationRequest) {
       await UserResource.registration(payload)
-        .then(() => {
-          window.$message.success("Успешная регистрация, авторизируйтесь");
-        })
+        .then(() => {})
         .catch(() => {});
     },
 

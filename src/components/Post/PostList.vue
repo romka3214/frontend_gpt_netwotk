@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { PostResource } from "@/api/resources/post";
 import { PostResponse } from "@/api/responses/post/post";
 import PostSkeleton from "@/components/Post/PostSkeleton.vue";
+import PostCreate from "@/components/Post/PostCreate.vue";
 
 const postList = ref<Array<PostResponse>>([]);
 
@@ -16,9 +17,14 @@ const isInitialLoading = ref(true);
 
 const scrollContainer = ref<HTMLElement | null>(null);
 
-const loadPosts = async () => {
+const loadPosts = async (whole?: boolean) => {
   if (isLoading.value) return;
   isLoading.value = true;
+
+  if (whole) {
+    postList.value = [];
+    pageIndex.value = 1;
+  }
 
   await PostResource.get({
     pageIndex: pageIndex.value,
@@ -84,6 +90,7 @@ onUnmounted(() => {
 
 <template>
   <div>
+    <PostCreate @new-post="loadPosts(true)" />
     <template v-if="isInitialLoading">
       <div v-for="n in 5" :key="n">
         <PostSkeleton />

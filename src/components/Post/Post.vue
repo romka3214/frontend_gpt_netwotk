@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import ChatboxOutline from "@vicons/ionicons5/ChatboxOutline";
-import { PostResponse as PostData } from "@/api/responses/post/post"; // Импорт типа из отдельного файла
+import { PostResponse as PostData } from "@/api/responses/post/post";
 import moment from "moment";
 import { ref } from "vue";
 import CommentList from "@/components/Comment/CommentList.vue";
+import Avatar from "@/assets/img/ava.png";
 defineProps<{
   post: PostData;
 }>();
@@ -17,14 +18,12 @@ const toggleComments = () => {
 <template>
   <n-card class="mb-4">
     <div class="flex items-center space-x-2 pb-4">
-      <img
-        src="https://via.placeholder.com/40"
-        alt="Avatar"
-        class="rounded-full w-10 h-10"
-      />
+      <img :src="Avatar" alt="Avatar" class="rounded-full w-10 h-10" />
       <div>
         <span class="font-bold mr-3"> {{ post.authorName }}</span>
-        <span class="text-gray-400"> {{ moment(post.date).fromNow() }} </span>
+        <span class="text-gray-400">
+          {{ moment(post.createdAt).fromNow() }}
+        </span>
       </div>
     </div>
     <p>{{ post.text }}</p>
